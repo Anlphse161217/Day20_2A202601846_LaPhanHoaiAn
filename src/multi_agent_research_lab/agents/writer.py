@@ -11,9 +11,13 @@ class WriterAgent(BaseAgent):
     name = "writer"
 
     def run(self, state: ResearchState) -> ResearchState:
-        """Populate `state.final_answer`.
-
-        TODO(student): Synthesize a clear response with citations or source references.
-        """
-
-        raise StudentTodoError("TODO(student): implement WriterAgent.run")
+        """Generate final answer using LLM."""
+        from multi_agent_research_lab.services.llm_client import LLMClient
+        
+        llm = LLMClient()
+        system_prompt = "You are an expert technical writer. Write a comprehensive summary with citations."
+        user_prompt = f"Write a final answer based on the following analysis: {state.analysis_notes}\nSources: {state.sources}"
+        
+        response = llm.complete(system_prompt, user_prompt)
+        state.final_answer = response.content
+        return state

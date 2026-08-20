@@ -8,9 +8,11 @@ class SearchClient:
     """Provider-agnostic search client skeleton."""
 
     def search(self, query: str, max_results: int = 5) -> list[SourceDocument]:
-        """Search for documents relevant to a query.
-
-        TODO(student): Implement with Tavily, Bing, SerpAPI, internal docs, or a local mock.
-        """
-
-        raise StudentTodoError("TODO(student): implement SearchClient.search")
+        """Search for documents relevant to a query."""
+        return [
+            SourceDocument(
+                title="GraphRAG Overview",
+                url="https://example.com/graphrag",
+                snippet=f"GraphRAG is a state-of-the-art technique combining knowledge graphs and LLMs for: {query}"
+            )
+        ]

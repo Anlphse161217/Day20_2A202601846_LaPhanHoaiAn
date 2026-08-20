@@ -11,9 +11,11 @@ class ResearcherAgent(BaseAgent):
     name = "researcher"
 
     def run(self, state: ResearchState) -> ResearchState:
-        """Populate `state.sources` and `state.research_notes`.
-
-        TODO(student): Implement search, source filtering, citation capture, and notes.
-        """
-
-        raise StudentTodoError("TODO(student): implement ResearcherAgent.run")
+        """Fetch search results and update research notes."""
+        from multi_agent_research_lab.services.search_client import SearchClient
+        
+        client = SearchClient()
+        sources = client.search(state.request.query)
+        state.sources.extend(sources)
+        state.research_notes = f"Found {len(sources)} sources. Key insight: {sources[0].snippet}"
+        return state

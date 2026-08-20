@@ -51,4 +51,4 @@ class MultiAgentWorkflow:
         """Execute the graph and return final state."""
         app = self.build()
         result = app.invoke(state)
-        return result
+        return ResearchState(**result)
