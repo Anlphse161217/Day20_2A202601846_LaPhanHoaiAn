@@ -114,4 +114,14 @@ Cách khắc phục (chọn 1 trong 3):
 Mỗi nhóm trả lời 2 câu:
 
 1. Case nào nên dùng multi-agent? Vì sao?
+- **Trường hợp NÊN dùng multi-agent:** Khi bài toán phức tạp, có nhiều workflow song song, cần các vai trò khác nhau (người viết, người tìm kiếm thông tin, người đánh giá) để giảm tỷ lệ sai sót (hallucination). Vì chia nhỏ vấn đề ra cho các agent chuyên biệt sẽ tăng chất lượng output.
+
 2. Case nào không nên dùng multi-agent? Vì sao?
+- **Trường hợp KHÔNG NÊN dùng multi-agent:** Khi task quá đơn giản (như tóm tắt 1 câu, phân tích cảm xúc) hoặc khi yêu cầu khắt khe về thời gian phản hồi (latency), chi phí thấp. Vì workflow multi-agent sinh ra số lượng token rất lớn và xử lý chậm hơn nhiều so với gọi 1 prompt thẳng.
+
+## Phân tích Failure Mode & Cách Fix
+- **Failure Mode thường gặp:** Agent Writer (hoặc Analyst) bị rơi vào vòng lặp vô hạn hoặc sinh ra nội dung bịa đặt (hallucination) khi SearchClient trả về kết quả rỗng hoặc không liên quan.
+- **Cách Fix:** 
+  1. Thêm một `CriticAgent` vào workflow để kiểm duyệt tính logic và nguồn trích dẫn của nội dung trước khi ra kết quả cuối cùng.
+  2. Áp dụng cơ chế "Fallback" (nếu search fail 3 lần liên tiếp thì trả về câu trả lời mặc định là "Không tìm thấy thông tin").
+  3. Cài đặt giới hạn số bước lặp (đã làm trong `supervisor.py` với `MAX_ITERATIONS`) để tránh tốn tiền API vô ích.
